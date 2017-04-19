@@ -77,8 +77,8 @@ void send(int pir, int reed1, int reed2)
     String body;
     array.printTo(body);
 
-//    int httpCode = http.POST(body);
-//    Serial.printf("[HTTP] POST... code: %d\n", httpCode);
+    int httpCode = http.POST(body);
+    Serial.printf("[HTTP] POST... code: %d\n", httpCode);
     Serial.println(body);
 
     http.end();
