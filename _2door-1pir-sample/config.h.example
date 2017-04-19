@@ -1,0 +1,6 @@
+const char WIFI_SID[] = "接続するWifiのSSID";
+const char WIFI_PASSWORD[] = "接続するWifiのパスワード";
+
+const char END_POINT[] = "http://toiletevolution.space/api/devices/デバイスID/values";
+const char DEVICE_ID[] = "デバイスID";
+const char DEVICE_PASSWORD[] = "デバイス登録するときに入力したパスワード";
