@@ -2,7 +2,6 @@
 #include <ArduinoJson.h>
 
 #include <ESP8266WiFi.h>
-#include <ESP8266WiFiMulti.h>
 #include <ESP8266HTTPClient.h>
 
 #include "config.h"
@@ -14,8 +13,6 @@ const int REED_SWITCH_2 = 12;
 unsigned long prevSendTime = 0UL;
 boolean detected = false;
 
-ESP8266WiFiMulti WiFiMulti;
-
 void setup() {
   Serial.begin(115200);
   pinMode(PIR_MOTION_SENSOR, INPUT_PULLUP);
@@ -23,7 +20,9 @@ void setup() {
   pinMode(REED_SWITCH_1, INPUT_PULLUP);
   pinMode(REED_SWITCH_2, INPUT_PULLUP);
 
-  WiFiMulti.addAP(WIFI_SID, WIFI_PASSWORD);
+  WiFi.mode(WIFI_STA);
+  WiFi.printDiag(Serial);
+  connect();
 }
 
 void loop() {
@@ -62,7 +61,7 @@ boolean isPeopleDetected()
 
 void send(int pir, int reed1, int reed2)
 {
-  if((WiFiMulti.run() == WL_CONNECTED)) {
+  if (WiFi.status() == WL_CONNECTED) {
     HTTPClient http;
     Serial.print(F("[HTTP] begin...\n"));
     http.begin(END_POINT);
@@ -82,7 +81,17 @@ void send(int pir, int reed1, int reed2)
     Serial.println(body);
 
     http.end();
+  } else {
+    connect();
   }
 }
 
+void connect()
+{
+  WiFi.begin(WIFI_SID, WIFI_PASSWORD);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(1000);
+    Serial.print(".");
+  }
+}
 
